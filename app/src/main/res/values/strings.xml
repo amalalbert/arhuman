@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Wolter</string>
+    <string name="dancing">dancing</string>
+    <string name="talking">talking</string>
+    <string-array name="modes">
+        <item>House Dancing</item>
+        <item>Talking</item>
+    </string-array>
+
+</resources>
