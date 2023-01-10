@@ -42,12 +42,7 @@ class ArActivity : AppCompatActivity() {
     var hitResult:HitResult? =null
 
     var url:String = ""
-    var trackingState = TrackingState.STOPPED
-    val onTouchListener :Scene.OnTouchListener
-        get() {
-            TODO()
-        }
-//    var spinner:Spinner? = null
+    private var trackingState = TrackingState.STOPPED
     var btndance:Button? = null
     var btntalk:Button? = null
 
@@ -64,16 +59,6 @@ class ArActivity : AppCompatActivity() {
         )
         btndance = findViewById(R.id.dancing)
         btntalk = findViewById(R.id.talking)
-//        modelNode = TransformableNode(arFragment?.transformationSystem)
-//        spinner = findViewById(R.id.spinner)
-//        val arrayAdapter:ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,R.array.modes,
-//            android.R.layout.simple_spinner_item)
-//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-//        spinner?.adapter = arrayAdapter
-//        spinner?.setOnClickListener {
-//            it.
-//        }
-//        Toast.makeText(this,url, Toast.LENGTH_SHORT).show()
 //        arFragment?.setOnTapPlaneGlbModel("https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.glb")
 //        arFragment?.setOnTapPlaneGlbModel("models/skeleton.glb")
         arFragment?.setOnSessionConfigurationListener { session, config ->
@@ -102,23 +87,12 @@ class ArActivity : AppCompatActivity() {
             if (trackingState != arSceneformSession?.update()?.camera?.trackingState) {
                 trackingState = arSceneformSession?.update()?.camera?.trackingState!!
             }
-            Log.d("devhell", "onCreate: ${arFragment?.arSceneView?.scene}")
         }
         arFragment?.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
             // Create the Anchor
             this.hitResult = hitResult
             modelNode = TransformableNode(arFragment?.transformationSystem)
             anchorNode = AnchorNode(hitResult.createAnchor())
-            Log.d("devhell", "onCreate:${arSceneformScene} ")
-            arSceneformScene?.setOnTouchListener { hitTestResult, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    val filamentAsset = hitTestResult.node?.renderableInstance?.filamentAsset
-                    val renderAsset = hitTestResult.node?.renderableInstance?.renderable
-                    val uri = filamentAsset?.entities
-                    Log.d("devhell", "renderasset:${renderAsset?.submeshCount} ")
-                }
-                true
-            }
             if (!isTappedOnce) {
                 if (model != null) {
                     arSceneformScene?.addChild(anchorNode?.apply {
@@ -133,7 +107,6 @@ class ArActivity : AppCompatActivity() {
                             arFragment?.arSceneView?.planeRenderer?.isEnabled = false
                             renderableInstance.animate(true).start()
                             renderable_Instance = renderableInstance
-                            Log.d("amal", "onCreate: $renderable_Instance")
                         })
                         modelNode?.select()
                         modelNode?.localScale = Vector3(5f,5f,5f)
@@ -165,14 +138,6 @@ class ArActivity : AppCompatActivity() {
             arFragment?.arSceneView?.planeRenderer?.isEnabled = true
             loadModels2(uri)
         }
-
-//       modelNode.setOnTapListener { hitTestResult, motionEvent ->
-//           Log.d("devhell", "onCreate:${modelNode?.renderableInstance?.renderable?.submeshCount} ")
-//           Log.d("devhell", "onCreate:${model?.submeshCount} ")
-//           Log.d("devhell", "onCreate:${arSceneformScene} ")
-//           val rendr = modelNode?.renderableInstance?.renderable?.submeshCount
-//
-//       }
     }
     private fun loadModel() {
         loaders.plus(ModelRenderable.builder()
@@ -190,7 +155,6 @@ class ArActivity : AppCompatActivity() {
 
     private fun loadModels(urin: String) {
         val weakActivity = WeakReference(this)
-        Log.d("devhell", "loadModels:$urin")
         //Loading 3D Model:
         ModelRenderable.builder()
             .setSource(this, Uri.parse(urin))
@@ -214,7 +178,6 @@ class ArActivity : AppCompatActivity() {
     private fun loadModels2(urin: String) {
         modelNode?.renderable = null
         val weakActivity = WeakReference(this)
-        Log.d("devhell", "loadModels:$urin")
         //Loading 3D Model:
         ModelRenderable.builder()
             .setSource(this, Uri.parse(urin))
@@ -227,7 +190,6 @@ class ArActivity : AppCompatActivity() {
                     activity.model = model
                     modelNode = TransformableNode(arFragment?.transformationSystem)
                     anchorNode = AnchorNode(hitResult?.createAnchor())
-                    Log.d("devhell", "onCreate:${arSceneformScene} ")
                     if (model != null) {
                         arSceneformScene?.addChild(anchorNode?.apply {
                             // Create the transformable model and add it to the anchor
